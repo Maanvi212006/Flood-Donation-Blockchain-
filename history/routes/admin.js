@@ -1,26 +1,12 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const express = require("express");
+const router = express.Router();
+const { protect } = require("../middleware/authMiddleware");
+const { getAllCampaigns, verifyCampaign, getStats } = require("../controllers/adminController");
 
-const adminSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true },
-    role: { type: String, enum: ["superadmin", "admin"], default: "admin" },
-  },
-  { timestamps: true }
-);
+router.use(protect); // all admin routes require JWT
 
-// Hash password before saving
-adminSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
+router.get("/campaigns", getAllCampaigns);
+router.patch("/campaigns/:id/verify", verifyCampaign);
+router.get("/stats", getStats);
 
-// Compare passwords
-adminSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-module.exports = mongoose.model("Admin", adminSchema);
+module.exports = router;
