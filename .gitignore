@@ -1,0 +1,27 @@
+# =============================
+# Hardhat / Solidity
+# =============================
+artifacts/
+cache/
+typechain/
+coverage/
+coverage.json
+
+# =============================
+# Frontend Specific
+# =============================
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# =============================
+# Backend Specific
+# =============================
+backend/node_modules/
+
+# =============================
+# Environment Files
+# =============================
+.env
+.env.local
+.env.*.local
